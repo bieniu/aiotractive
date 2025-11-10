@@ -19,6 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class API:  # pylint: disable=too-many-instance-attributes
     API_URL = URL("https://graph.tractive.com/4/")
+    APS_API_URL = URL("https://aps-api.tractive.com/api/1/")
 
     DEFAULT_TIMEOUT = 10
 
@@ -76,12 +77,15 @@ class API:  # pylint: disable=too-many-instance-attributes
             raise TractiveError from error
 
     async def raw_request(  # pylint: disable=too-many-arguments
-        self, uri, params=None, data=None, method="GET", attempt: int = 1
-    ):
+        self, uri, params=None, data=None, method="GET", attempt: int = 1, aps_api: bool = False):
         """Perform request."""
+        if aps_api:
+            base_url = self.APS_API_URL
+        else:
+            base_url = self.API_URL
         async with self.session.request(
             method,
-            self.API_URL.join(URL(uri)).update_query(params),
+            base_url.join(URL(uri)).update_query(params),
             json=data,
             headers=await self.auth_headers(),
             timeout=self._timeout,
