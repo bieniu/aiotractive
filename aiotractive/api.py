@@ -77,7 +77,8 @@ class API:  # pylint: disable=too-many-instance-attributes
             raise TractiveError from error
 
     async def raw_request(  # pylint: disable=too-many-arguments
-        self, uri, params=None, data=None, method="GET", attempt: int = 1, aps_api: bool = False):
+        self, uri, params=None, data=None, method="GET", attempt: int = 1, aps_api: bool = False
+    ):
         """Perform request."""
         if aps_api:
             base_url = self.APS_API_URL
